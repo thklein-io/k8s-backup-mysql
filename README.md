@@ -28,7 +28,7 @@ The below table lists all of the Environment Variables that are configurable for
 | NOTIFY_ENABLED               | **(Optional)** (true/false) Enable or disable the Slack Integration (Default False).                             |
 | NOTIFY_USERNAME              | **(Optional)** (true/false) Username to use for the Slack Integration (Default: kubernetes-s3-mysql-backup).            |
 | NOTIFY_CHANNEL               | **(Required if Slack enabled)** Slack Channel the WebHook is configured for.                                     |
-| NOTIFY_WEBHOOK_URL           | **(Required if Slack enabled)** What is the Slack WebHook URL to post to? Should be configured using a Secret in Kubernetes.                                                                                                                                      |
+| NOTIFICATION_WEBHOOK_URL           | **(Required if Slack enabled)** What is the Slack WebHook URL to post to? Should be configured using a Secret in Kubernetes.                                                                                                                                      |
 
 
 ## Slack Integration
@@ -93,7 +93,7 @@ data:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: NOTIFY_WEBHOOK_URL
+  name: NOTIFICATION_WEBHOOK_URL
 type: Opaque
 data:
   slack_webhook_url: <Your Slack WebHook URL>
@@ -143,10 +143,10 @@ spec:
                 value: "<true/false>"
               - name: NOTIFY_CHANNEL
                 value: "#chatops"
-              - name: NOTIFY_WEBHOOK_URL
+              - name: NOTIFICATION_WEBHOOK_URL
                 valueFrom:
                    secretKeyRef:
-                     name: NOTIFY_WEBHOOK_URL
+                     name: NOTIFICATION_WEBHOOK_URL
                      key: slack_webhook_url
           restartPolicy: Never
 ```

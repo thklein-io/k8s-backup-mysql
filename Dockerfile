@@ -5,7 +5,6 @@ RUN apk add --no-cache mysql-client aws-cli curl
 # Set Default Environment Variables
 ENV TARGET_DATABASE_PORT=3306
 ENV NOTIFY_ENABLED=false
-ENV NOTIFY_USERNAME=kubernetes-s3-mysql-backup
 
 # Copy Slack Alert script and make executable
 COPY resources/notify.sh /
