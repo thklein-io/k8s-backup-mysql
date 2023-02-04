@@ -1,17 +1,8 @@
 FROM alpine:3.17.1
 
-RUN apk -v --update add \
-        python \
-        py-pip \
-        groff \
-        less \
-        mailcap \
+RUN apk add --no-cache \
         mysql-client \
-        curl \
-        && \
-    pip install --upgrade awscli s3cmd python-magic && \
-    apk -v --purge del py-pip && \
-    rm /var/cache/apk/*
+        aws-cli
 
 # Set Default Environment Variables
 ENV TARGET_DATABASE_PORT=3306
