@@ -1,8 +1,6 @@
 FROM alpine:3.17.1
 
-RUN apk add --no-cache \
-        mysql-client \
-        aws-cli
+RUN apk add --no-cache mysql-client aws-cli curl
 
 # Set Default Environment Variables
 ENV TARGET_DATABASE_PORT=3306
