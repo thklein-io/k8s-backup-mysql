@@ -1,5 +1,4 @@
-# Set the base image
-FROM alpine:3.6
+FROM alpine:3.17.1
 
 RUN apk -v --update add \
         python \
@@ -16,12 +15,12 @@ RUN apk -v --update add \
 
 # Set Default Environment Variables
 ENV TARGET_DATABASE_PORT=3306
-ENV SLACK_ENABLED=false
-ENV SLACK_USERNAME=kubernetes-s3-mysql-backup
+ENV NOTIFY_ENABLED=false
+ENV NOTIFY_USERNAME=kubernetes-s3-mysql-backup
 
 # Copy Slack Alert script and make executable
-COPY resources/slack-alert.sh /
-RUN chmod +x /slack-alert.sh
+COPY resources/notify.sh /
+RUN chmod +x /notify.sh
 
 # Copy backup script and execute
 COPY resources/perform-backup.sh /

@@ -25,10 +25,10 @@ The below table lists all of the Environment Variables that are configurable for
 | TARGET_DATABASE_NAMES       | **(Required)** Name of the databases to dump. This should be comma seperated (e.g. `database1,database2`).       |
 | TARGET_DATABASE_USER        | **(Required)** Username to authenticate to the database with.                                                    |
 | TARGET_DATABASE_PASSWORD    | **(Required)** Password to authenticate to the database with. Should be configured using a Secret in Kubernetes. |
-| SLACK_ENABLED               | **(Optional)** (true/false) Enable or disable the Slack Integration (Default False).                             |
-| SLACK_USERNAME              | **(Optional)** (true/false) Username to use for the Slack Integration (Default: kubernetes-s3-mysql-backup).            |
-| SLACK_CHANNEL               | **(Required if Slack enabled)** Slack Channel the WebHook is configured for.                                     |
-| SLACK_WEBHOOK_URL           | **(Required if Slack enabled)** What is the Slack WebHook URL to post to? Should be configured using a Secret in Kubernetes.                                                                                                                                      |
+| NOTIFY_ENABLED               | **(Optional)** (true/false) Enable or disable the Slack Integration (Default False).                             |
+| NOTIFY_USERNAME              | **(Optional)** (true/false) Username to use for the Slack Integration (Default: kubernetes-s3-mysql-backup).            |
+| NOTIFY_CHANNEL               | **(Required if Slack enabled)** Slack Channel the WebHook is configured for.                                     |
+| NOTIFY_WEBHOOK_URL           | **(Required if Slack enabled)** What is the Slack WebHook URL to post to? Should be configured using a Secret in Kubernetes.                                                                                                                                      |
 
 
 ## Slack Integration
@@ -93,7 +93,7 @@ data:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: SLACK_WEBHOOK_URL
+  name: NOTIFY_WEBHOOK_URL
 type: Opaque
 data:
   slack_webhook_url: <Your Slack WebHook URL>
@@ -139,14 +139,14 @@ spec:
                    secretKeyRef:
                      name: TARGET_DATABASE_PASSWORD
                      key: database_password
-              - name: SLACK_ENABLED
+              - name: NOTIFY_ENABLED
                 value: "<true/false>"
-              - name: SLACK_CHANNEL
+              - name: NOTIFY_CHANNEL
                 value: "#chatops"
-              - name: SLACK_WEBHOOK_URL
+              - name: NOTIFY_WEBHOOK_URL
                 valueFrom:
                    secretKeyRef:
-                     name: SLACK_WEBHOOK_URL
+                     name: NOTIFY_WEBHOOK_URL
                      key: slack_webhook_url
           restartPolicy: Never
 ```
