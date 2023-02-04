@@ -16,7 +16,7 @@ do
         echo -e "Database backup successfully completed for $CURRENT_DATABASE at $(date +'%d-%m-%Y %H:%M:%S')."
 
         # Perform the upload to S3. Put the output to a variable. If successful, print an entry to the console and the log. If unsuccessful, set has_failed to true and print an entry to the console and the log
-        if awsoutput=$(aws s3 cp /tmp/$CURRENT_DATABASE.sql s3://$AWS_BUCKET_URI$AWS_BUCKET_BACKUP_PATH/$CURRENT_DATABASE.sql 2>&1)
+        if awsoutput=$(aws s3 cp /tmp/$CURRENT_DATABASE.sql $AWS_BUCKET_URI$AWS_BUCKET_BACKUP_PATH/$CURRENT_DATABASE.sql 2>&1)
         then
             echo -e "Database backup successfully uploaded for $CURRENT_DATABASE at $(date +'%d-%m-%Y %H:%M:%S')."
         else
