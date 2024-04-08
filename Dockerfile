@@ -1,6 +1,6 @@
-FROM alpine:3.17.1
+FROM alpine:3.12
 
-RUN apk add --no-cache mysql-client aws-cli curl
+RUN apk add --no-cache mysql-client aws-cli curl bash
 
 # Set Default Environment Variables
 ENV TARGET_DATABASE_PORT=3306
@@ -13,4 +13,4 @@ RUN chmod +x /notify.sh
 # Copy backup script and execute
 COPY resources/perform-backup.sh /
 RUN chmod +x /perform-backup.sh
-CMD ["sh", "/perform-backup.sh"]
+CMD ["bash", "/perform-backup.sh"]
