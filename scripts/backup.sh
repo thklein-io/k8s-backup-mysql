@@ -1,5 +1,15 @@
 #!/bin/bash
 
+echo "Starting database backup process at $(date +'%d-%m-%Y %H:%M:%S')."
+echo -e "Config: \n\tDatabase Host: $TARGET_DATABASE_HOST \n\tDatabase Port: $TARGET_DATABASE_PORT \n\tDatabase User: $TARGET_DATABASE_USER \n\tDatabase Names: $TARGET_DATABASE_NAMES \n\tAWS Bucket URI: $AWS_BUCKET_URI \n\tAWS Bucket Backup Path: $AWS_BUCKET_BACKUP_PATH"
+
+# Exit if any of the required environment variables are not set
+if [ -z "$TARGET_DATABASE_HOST" ] || [ -z "$TARGET_DATABASE_PORT" ] || [ -z "$TARGET_DATABASE_USER" ] || [ -z "$TARGET_DATABASE_PASSWORD" ] || [ -z "$TARGET_DATABASE_NAMES" ] || [ -z "$AWS_BUCKET_URI" ] || [ -z "$AWS_BUCKET_BACKUP_PATH" ]
+then
+    echo -e "ERROR: One or more required environment variables are not set. Exiting with status code 1."
+    exit 1
+fi
+
 # Set the has_failed variable to false. This will change if any of the subsequent database backups/uploads fail.
 has_failed=false
 backup_name=""
@@ -49,6 +59,12 @@ then
         /notify.sh "One or more backups on database host $TARGET_DATABASE_HOST failed. The error details are included below:" "$logcontents"
     fi
 
+    if [ "$HEALTHCHECK_ENABLED" = true ]
+    then
+        # Send healthcheck alert
+        /healthcheck.sh "fail"
+    fi
+
     echo -e "kubernetes-s3-mysql-backup encountered 1 or more errors. Exiting with status code 1."
     exit 1
 else
@@ -57,6 +73,14 @@ else
     then
         /notify.sh "Backup created: $backup_tar_name"
     fi
+
+    if [ "$HEALTHCHECK_ENABLED" = true ]
+    then
+        # Send healthcheck alert
+        /healthcheck.sh
+    fi
+
+    echo -e "All database backups completed successfully. Exiting with status code 0."
 
     exit 0
 fi
